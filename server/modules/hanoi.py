@@ -231,6 +231,7 @@ def movetime(text):
                     nosuccess = True
     if not nosuccess:
         m = M(n,k)
+        '''
         years = int(m/(3600*24*365))
         remaining = m-years *3600*24*365
         months = int(remaining/(3600*24*(365/12)))
@@ -242,6 +243,16 @@ def movetime(text):
         minutes = int(remaining/60)
         remaining -= minutes * 60
         seconds = remaining
+        '''
+
+        seconds = m % 60
+        minutes = (m % 3600 - m % 60) / 60
+        hours = (m % (3600 * 24) - m % 3600) / (24 * 60)
+        days = (m % (3600 * 24 * 365) - m % (3600 * 24)) / (24 * 60 * 365)
+        years = days % 365
+        days -= years * 365
+        months = days % int(365 / 12)
+        days -= months * int(365 / 12)
 
         time_string = ""
         if years > 0:
@@ -434,6 +445,6 @@ def main():
 if __name__ == '__main__':
     #print(movenumber("Wie viele Züge brauche ich bei 4 Scheiben und 3 Feldern"))
     #print(possibilitynumber("Wie viele Möglichkeiten gibt es bei 20 Scheiben und 4 Feldern"))
-    print(moves("Wie kann ich die Türme von Hanoi mit 4 Scheiben und 3 Feldern lösen"))
+    print(movetime("Wie lange ich die Türme von Hanoi mit 100 Scheiben und 3 Feldern lösen"))
     #movetime(text)
     #main()
