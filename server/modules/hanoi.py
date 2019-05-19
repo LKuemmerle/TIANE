@@ -299,7 +299,7 @@ def movetime(text):
 def moves(text):
     text = text.lower()
     textlist = re.split(r"\s", text)
-    nosuccess = False
+    success = True
     ret = ''
     for index, word in enumerate(textlist):
         if index > 1:
@@ -307,28 +307,26 @@ def moves(text):
                 try:
                     k = int(textlist[index-1])
                 except:
-                    nosuccess = True
+                    success = False
             if re.search(r"scheibe|scheiben|klotz|klötze", word):
                 try:
                     n = int(textlist[index-1])
                 except:
-                    nosuccess = True
-    if not nosuccess:
+                    success = False
+    if success:
         moveslist = movessequence_ui(n, k)
-        firstmove = True
+        word = "zunächst"
+        konjunctionlist = ["dann ", "daraufhin ", "nun ", "danach ", "als nächstes ", "", "im nächsten Zug "]
         for move in moveslist:
-            #disk = move[0]
+            oldword = word
             startpeg = str(move[1])
             endpeg = str(move[2])
-            konjunctionlist = ["dann", "daraufhin", "nun", "danach", "als nächstes"]
-            if firstmove:
-                ret += 'Bewege {} die oberste Scheibe von Feld {} nach Feld {}. '.format("zunächst", startpeg, endpeg)
-                firstmove = False
-            else:
-                ret += ' Bewege {} die oberste Scheibe von Feld {} nach Feld {}.'.format(konjunctionlist[random.randint(0,len(konjunctionlist)-1)], startpeg, endpeg)
+            ret += 'Bewege {}die oberste Scheibe von Feld {} nach Feld {}. '.format(oldword, startpeg, endpeg)
+            while word == oldword:
+                word = konjunctionlist[random.randint(0,len(konjunctionlist)-1)]
     else:
         ret = "Ich konnte leider keine Zugzahl ermitteln"
-    return ret, not nosuccess
+    return ret, success
 
 def handle(txt, tiane, profile):
     '''
