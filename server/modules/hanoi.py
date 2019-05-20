@@ -209,27 +209,27 @@ def movetime(text):
     if success:
         totalseconds = M(n,k)
 
-        yRest = totalseconds % (3600*24*365)
-        years = int((totalseconds-yRest)/(3600*24*365))
+        yRest = totalseconds % (3600 * 24 * 365)
+        years = int((totalseconds - yRest) / (3600 * 24 * 365))
 
-        mRest = yRest % (3600*2*365) # 3600 * 24 * 365/12
-        months = int((yRest-mRest)/(3600*2*365))
+        mRest = yRest % (3600 * 2 * 365)  # 3600 * 24 * 365/12
+        months = int((yRest - mRest) / (3600 * 2 * 365))
 
-        dRest = mRest % (3600*24)
-        days = int((mRest-dRest)/(3600*24))
+        dRest = mRest % (3600 * 24)
+        days = int((mRest - dRest) / (3600 * 24))
 
         hRest = dRest % (3600)
-        hours = int((dRest-hRest)/(3600))
+        hours = int((dRest - hRest) / (3600))
 
         mRest = hRest % (60)
-        minutes = int((hRest-mRest)/(60))
+        minutes = int((hRest - mRest) / (60))
 
         seconds = int(mRest)
 
         time_string = ''
 
         if years > 0:
-            if years ==1:
+            if years == 1:
                 time_string += '1 Jahr'
             else:
                 time_string += str(years) + ' Jahre'
@@ -406,5 +406,61 @@ if __name__ == '__main__':
              #########      ###       #######   
             ###########    #####     #########  ###########
 -----1----- -----2----- -----3----- -----4----- -----5-----
-'''
+
+
+
+
+     +-----------+
+     |           |
+                 V
+             #########
+    ###     ###########
+-----1----- -----4-----
+
+
+# Noch nicht fertig
+def moveGUI(text):
+    n, k, success = getNK(text)
+    pictures = []
+    configuration = []
+    if success:
+        for i in range(k):
+            configuration[0][0].append(k-i-1)
+        
+        moveslist = movessequence_ui(n, k)
+        
+        for movenumber, move in enumerate(moveslist):
+            startpeg = str(move[1])
+            endpeg = str(move[2])
+            pictures.append([])
+            pictures[0].append([])
+            for peg in [startpeg, endpeg]:
+                for i in range(n):
+                    pictures[movenumber][0].append('-')
+                
+                pictures[movenumber][0].append(peg)
+                
+                for i in range(n):
+                    pictures[movenumber][0].append('-')
+
+                pictures[movenumber][0].append(' ')
+
+
+                    
             
+
+            configuration[endpeg].append(configuration[startpeg][-1])
+            configuration[startpeg] = configuration[startpeg][:-1]
+            
+        
+        for n,command in enumerate(commandlist):
+            if n % 10 == 0:
+                ret.append('')
+            ret[-1] += command
+            if n % 10 != 9:
+                ret[-1] += '\n'
+
+    else:
+        ret = ['Ich konnte leider keine Zugfolge ermitteln']
+    return ret, success
+'''
